@@ -1,4 +1,4 @@
-# arithmetic
+#h1 arithmetic
 算法项目
 目前包含的算法：
   链表：
