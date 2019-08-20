@@ -34,6 +34,7 @@ public class BinTreeTraverse {
             nodeList.add(new Node(array[nodeIndex]));
         }
         // 对前lastParentIndex-1个父节点按照父节点与孩子节点的数字关系建立二叉树
+        //array.length / 2 - 1  这个表示非叶子节点的个数
         for (int parentIndex = 0; parentIndex < array.length / 2 - 1; parentIndex++) {
             // 左孩子
             nodeList.get(parentIndex).leftChild = nodeList
@@ -56,7 +57,7 @@ public class BinTreeTraverse {
 
     /**
      * 先序遍历
-     *
+     * 先序遍历访问节点的顺序是根节点-左儿子-右儿子
      * 这三种不同的遍历结构都是一样的，只是先后顺序不一样而已
      *
      * @param node 遍历的节点
@@ -72,7 +73,7 @@ public class BinTreeTraverse {
 
     /**
      * 中序遍历
-     *
+     * 左儿子-根节点-右儿子
      * 这三种不同的遍历结构都是一样的，只是先后顺序不一样而已
      *
      * @param node 遍历的节点
@@ -88,7 +89,7 @@ public class BinTreeTraverse {
 
     /**
      * 后序遍历
-     *
+     * 左儿子-右儿子-根节点
      * 这三种不同的遍历结构都是一样的，只是先后顺序不一样而已
      *
      * @param node 遍历的节点
