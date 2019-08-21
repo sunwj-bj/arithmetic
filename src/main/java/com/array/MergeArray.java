@@ -23,6 +23,7 @@ public class MergeArray {
         for(i=0;i<n;i++){
             for(j=0;j<m+i;j++){
                 if(nums2[i]<=nums1[j]){
+                    //nums1数组里面的数从后往前依次后移，腾位置给较小的数
                     for(k=m+i;k>j;k--){
                         nums1[k]=nums1[k-1];
                     }
