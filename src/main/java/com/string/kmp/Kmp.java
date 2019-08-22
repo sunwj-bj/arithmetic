@@ -1,4 +1,4 @@
-package com.kmp;
+package com.string.kmp;
 
 public class Kmp {
     /**
