@@ -15,8 +15,8 @@ public class TradingStraregy {
         return value.multiply(percent).add(value).setScale(4, RoundingMode.HALF_DOWN);
     }
     public static void main(String[] args) {
-        String value="1.3686";
-        String percent="-0.05";
+        String value="1.6280";
+        String percent="0.2";
         BigDecimal newValue = computeValue(new BigDecimal(value),new BigDecimal(percent));
         System.out.println(newValue);
     }
