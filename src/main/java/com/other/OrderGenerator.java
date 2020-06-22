@@ -48,7 +48,10 @@ public enum OrderGenerator {
      */
     private long datacenterIdShift = sequenceBits + workerIdBits;
 
-    private long lastTimestamp = -1L;
+    /**
+     * 为了保证绝对唯一，这里用static
+     */
+    private static long lastTimestamp = -1L;
 
     OrderGenerator() {
         workerId = 0x000000FF & getLastIP();
