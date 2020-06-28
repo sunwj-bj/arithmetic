@@ -196,9 +196,11 @@ public class HttpUtil {
         HashMap requestMap=new HashMap<String,String>(5);
         requestMap.put("productCode","PTCMBC01");
         requestMap.put("certType","0");
-        requestMap.put("certNo",md5LowerCase("410195199612123655"));
-        requestMap.put("mobile",md5LowerCase("{18695632654"));
+        requestMap.put("certNo",md5LowerCase("110101198001010010"));
+        requestMap.put("mobile",md5LowerCase("18695632654"));
         requestMap.put("custName",md5LowerCase("张三"));
+        requestMap.put("md5Flag","true");
+
 
         try {
             String dataJson = objectMapper.writeValueAsString(requestMap);
@@ -218,8 +220,30 @@ public class HttpUtil {
             commonParams.put("sign", sign);
             commonParams.put("data", data);
             String message = objectMapper.writeValueAsString(commonParams);
-            String s = sendHttps("https://bcogwdev.sncfc.com.cn/sncfc-oss/yl/PTCMBC01", message);
-            logger.info("调用返回：{}",s);
+            String response = sendHttps("https://bcogwdev.sncfc.com.cn/sncfc-oss/yl/CMBC", message);
+            logger.info("调用返回：{}",response);
+            Map<String, Object> returnMap = objectMapper.readValue(response, Map.class);
+            String aesKeyStr = (String) returnMap.get("encryptKey");
+            byte[] aesKeyReturn = RSACoder.decrypt(aesKeyStr, partnerPriKeyStr);
+            String encryptData = (String) returnMap.get("data");
+            String returnDataJson = new String(AesEncryptor.decrypt(Base64.decodeBase64(encryptData), aesKeyReturn),"UTF-8");
+            System.out.println("苏宁返回结果："+returnDataJson);
+            Map<String, Object> dataParams = (Map<String, Object>) objectMapper.readValue(returnDataJson, Map.class);
+            // 验签
+            sign = (String) returnMap.get("sign");
+            // 公共参数去除sign字段
+            returnMap.remove("sign");
+            // 将解密后的业务参数放入公共参数
+            returnMap.put("data", returnDataJson);
+            signString = getSignString(returnMap);
+            if (!RSACoder.verifySha256(signString.getBytes("UTF-8"), sncfcPubKeyStr, sign)) {
+                System.out.println("苏宁准入接口验签不通过");
+                return;
+            } else {
+                System.out.println("验签通过");
+            }
+            System.out.println("responseCode="+String.valueOf(dataParams.get("responseCode")));
+            System.out.println("responseMsg="+String.valueOf(dataParams.get("responseMsg")));
         } catch (Exception e) {
             logger.error("调用异常！",e);
         }
