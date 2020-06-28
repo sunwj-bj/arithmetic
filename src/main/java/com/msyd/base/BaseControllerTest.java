@@ -1,6 +1,4 @@
-package com.msyd;
-
-import com.msyd.base.*;
+package com.msyd.base;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +49,7 @@ public class BaseControllerTest {
             String str = Des.encryptDES(param,APPKEY_KEY_ANDROID);
             str = str.replaceAll("\\+", "%2B");
             str = str.replaceAll("\\ ", "+");
-            System.out.println("==========>" + str);
+            System.out.println("加密后的请求报文=======>" + str);
             jsonParams.append("param=" + str);
         } catch (Exception e1) {
             e1.printStackTrace();
