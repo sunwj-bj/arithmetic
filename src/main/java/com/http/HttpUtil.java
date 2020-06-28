@@ -13,13 +13,27 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.net.ssl.X509TrustManager;
+import com.other.OrderGenerator;
+import org.apache.commons.codec.binary.Base64;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.codec.digest.DigestUtils;
 
+/**
+ * http工具类
+ * @author sunwj
+ */
 public class HttpUtil {
 
     private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
 
     public static String sendHttp(String url, String sendString) throws Exception {
         HttpURLConnection con = null;
@@ -65,6 +79,7 @@ public class HttpUtil {
     private static void trustAllHosts() {
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            @Override
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return new java.security.cert.X509Certificate[]{};
             }
@@ -134,14 +149,77 @@ public class HttpUtil {
             }
 
         }
-        logger.error("调用接口返回数据：{}",result);
+        logger.info("调用接口返回数据：{}",result);
         return result;
     }
 
+    public static String md5LowerCase(String data) {
+        return DigestUtils.md5Hex(data).toLowerCase();
+    }
+
+    private static String getSignString(Map<String, Object> commonParams) {
+        // sign businessParams
+        Map<String,Object> signMap = new TreeMap<>(commonParams);
+        // 待签名的字符串
+        StringBuilder values2SignBuilder = new StringBuilder();
+        for(Map.Entry<String,Object> entry : signMap.entrySet()){
+            if (entry.getKey() == null || entry.getValue() == null) {
+                continue;
+            }
+            values2SignBuilder.append(entry.getValue());
+        }
+        String signLine = values2SignBuilder.toString();
+        return signLine;
+    }
+
+    private static Map<String, Object> initCommonParams(String interfaceName,String timestamp, String encryptKey, String data) {
+        Map<String, Object> commonMap = new HashMap<>();
+        // 请求流水号
+        commonMap.put("serialNumber", OrderGenerator.INSTANCE.nextOrderId("SN"));
+        // 业务参数
+        commonMap.put("data", data);
+        // AES密钥
+        commonMap.put("encryptKey", encryptKey);
+        // 业务接口名称
+        commonMap.put("serviceId",interfaceName);
+        // 时间戳
+        commonMap.put("timestamp", timestamp);
+        // 版本号
+        commonMap.put("version", "1.0");
+        return commonMap;
+    }
+
     public static void main(String[] args) {
+        String interfaceName = "USER_QUALIFICATION_CHECK";
+        String sncfcPubKeyStr = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqMJtNRvw0wYJGZzqK09OWHVKrWvtcWm/J3kGifsdhA8fjPjhOSHxQUWi361eKdg5LMbsplHBlX/bCsHRI04EPsHJMJ8Cu7khmZgo/4lfoG9FmArI971w5sv23SUeCpGwe6aMhwF31yfGicrzKXIonEY4XvgVHLKOcGLJfyCUcL2+aEMUn9PS3n3Zl76pj1Ec6bFGZAdUsjaJ57QVtGQiAP+jJOOASBZvAy8YDxajBPTB2mW4tknpljRLSparSGa5UbcsL6pN8Z6MdOECi0iA/HFlI2UtVXd5wWmnp40LkimDJ+xmcCHwyNnZLa+X+mZcuyTStCROxs4JP5SGk02vlQIDAQAB";
+        String partnerPriKeyStr = "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDK+9vVKBGw2XVS1AfDoT7eED9Ed23e+WVWQSOUiX7Nr497aWT6IwvJ0nlvmNLFJDtyaTa8xKB6pW7kZE+0xN5wai51CHgBnUc3ZhbIai5DmMX/0bYxSe0bLR/eVtaENGQY8HeA6u2iYR7qDzeC3XEMfhCaKGii0HSg6XYEXONoJy765j+Z82DJOWHd8oFWG/rGyTSQy3S/PYsoqaI4p1dGjfDKQWV1Dv20P8cFfEJNJ9lT8lLF9VgyRik3JxqovOiPjca2GoK+ccPBTXXqiLhbbYpAGvklmx9EcJfPprKy9dQgAPwJdLKjOdpma5oUqTk7iXmgNfhj7Xgkkw/yO9SBAgMBAAECggEAPfXVa+KYS9iFVKw+VnwQ+a4R8e9WzXppcYPevYee+mA9txk75pLuFUQ3J1aJ9/2QW+M7/zEyH14CVJs+LVru33e6CKV2JGADDikOiUzIJIAs6GL2b2M2ilYi5TayspZfe7FjeSm9MhTdX+sXMc4wpPSSUsxE7HYfM8Mv8DL+g5rvGNB4hCjy+p056dSsVw8IbltdPF4oNn09/lGCRGxla3hQif75Rdei3DBadSMNgPoUQQCyILEZgjCN2YNZrfZJZm7tRqAdhr54mIeJoL9EYOAl+1zvHVi+Z97nRVGvPEOkP03kr1ahFRMpfU00yL8jSB93UttnMtRsI9ocRu6M1QKBgQDtFm1vUMim3z0odfrpId9UoRi5SYBG6kl6XkORt5+4NgfZDcVIVwJdQRpW9lgoOJaoZbyG63pDD8cAtcArkCPRFh6UYfNpd/K4eQy/yz38mz7G/GX44EyGbrg3vLioqj2JMlOc+cGL2YCdCAiqKHiGdGi6oez41pfmjeDgZwluNwKBgQDbLP821M/7ekQ85h+Rzx/msHXj5VD7OZtxCn3Ozl16InsqBNgbQ6J7KYK+ZRcxytzoJ3Al5koReJ5OHUpHiyfIwIQzKo7g++qingCffmy4WE3mMXW6QX7Ritrfp7tK8/CAoyWY8DPu4e6YXF5USd0ih2p2dPdXVc0NhaxPchQ3BwKBgCNa3dTkuhdQYQFgnpsXZwNqxpIS6OMqWuy5k9/t/w5sWD1A9XN1LjAT3kark7fjwGu6SCPih6fqeWWctNyKMR0j7El6Vd8beQGTY5hSSZsa14C68MXtRNwjNKtzJCJayLRl4dwdzoP5WlmQciJVyKtcPqXeMcVl0t8ZtzgfhWN/AoGAV503MF4F/gs0N/vt5sWbhQZJOh6zLpoqrxd4jzEjYO1jurpRASUaUI2ZfC7BBOCJSixpwly6gx1qeuNujAbukmuS7Tk4AGvzsanjqd5J668xBLIE073WykDtmbZdQmsdWu7c2rQ6rmWWkUVrV9pnEaR8RHohXcIoxB0JcoCx4AUCgYBkLqIK5wwQoPE7+1Ac/TnUr77TKQ5hmG0YyWTR7rPWTramjujCPbBaZBABo5fmWX/eTEo6bhZbP466pxaCXh+99+pen263crh9Hc8rQiKNYMPuJnDYGYyAWlEHtDOYDYIRSYkKfBjZ21Pxr/He55avp1BMVDwqXHT3qF5Hvx7XSw==";
+        HashMap requestMap=new HashMap<String,String>(5);
+        requestMap.put("productCode","PTCMBC01");
+        requestMap.put("certType","0");
+        requestMap.put("certNo",md5LowerCase("410195199612123655"));
+        requestMap.put("mobile",md5LowerCase("{18695632654"));
+        requestMap.put("custName",md5LowerCase("张三"));
+
         try {
-            String s = sendHttps("https://bcogwdev.sncfc.com.cn/sncfc-oss/yl/", "");
-            logger.info("调用返回：",s);
+            String dataJson = objectMapper.writeValueAsString(requestMap);
+            // 时间戳
+            String timestamp = Long.toString(System.currentTimeMillis() / 1000L);
+            // 生成AES密钥
+            byte[] aesKey = AesEncryptor.randomAesKey();
+            String encryptKey = RSACoder.encrypt(aesKey, sncfcPubKeyStr);
+            // 公共参数
+            Map<String, Object> commonParams = initCommonParams(interfaceName,timestamp, encryptKey, dataJson);
+            String signString = getSignString(commonParams);
+            // 签名
+            String sign = RSACoder.signSha256(signString.getBytes("UTF-8"), partnerPriKeyStr);
+            // 加密
+            String data = Base64.encodeBase64URLSafeString(AesEncryptor.encrypt(dataJson.getBytes("UTF-8"), aesKey));
+            // 将签名、加密后的业务参数放入公共参数
+            commonParams.put("sign", sign);
+            commonParams.put("data", data);
+            String message = objectMapper.writeValueAsString(commonParams);
+            String s = sendHttps("https://bcogwdev.sncfc.com.cn/sncfc-oss/yl/PTCMBC01", message);
+            logger.info("调用返回：{}",s);
         } catch (Exception e) {
             logger.error("调用异常！",e);
         }
