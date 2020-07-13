@@ -41,8 +41,8 @@ public class HttpClient implements java.io.Serializable {
 
     private static HttpURLConnection getConnection(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-        //con.setConnectTimeout(connectionTimeout);
-        //con.setReadTimeout(readTimeout);
+        con.setConnectTimeout(connectionTimeout);
+        con.setReadTimeout(readTimeout);
         return con;
     }
 
