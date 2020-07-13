@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * 民生易贷wireless调用测试
  * @author sunwj
  */
 public class LoginControllerTest extends BaseControllerTest {
