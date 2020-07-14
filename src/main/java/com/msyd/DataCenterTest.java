@@ -16,6 +16,7 @@ public class DataCenterTest {
         String testUrl = "http://172.30.15.20/anti-fraud/verify/checkFaceCache";
         StringBuffer sb = new StringBuffer();
         sb.append("name=张三");
+        sb.append("&appId=YKD");
         sb.append("&idCard=110101198001010037");
         sb.append("&mobile=18763256958");
         sb.append("&productType=YKD");
