@@ -15,7 +15,7 @@ public class BaseControllerTest {
 
     public final static String APPKEY_KEY_IOS = "5E29C2DD";
 
-    private static String BASE_URL = "http://172.30.10.70:8806/";
+    private static String BASE_URL = "http://172.30.1.123:8806/";
     //	private static String BASE_URL = "https://m.msyidai.com/";
 
     private String requestUrl = null;
