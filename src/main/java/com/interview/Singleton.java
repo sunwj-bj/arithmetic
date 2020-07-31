@@ -4,6 +4,7 @@ package com.interview;
  * @author sunwj
  */
 public class Singleton {
+    //加volatile是为了防止指令重排序
     private volatile static Singleton singleton;
 
     private Singleton() {
