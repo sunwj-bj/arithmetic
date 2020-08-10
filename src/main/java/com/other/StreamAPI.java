@@ -7,11 +7,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author sunwj
  */
 public class StreamAPI {
+
+    /**
+     * 对list中的map进行分组求和
+     * 利用java8工具类
+     */
+    @Test
+    public void listByGroup1() {
+        List<Map<String, Object>> mapList = getList();
+        Supplier<Map<String, Object>> mapFct = HashMap::new;
+        List<Map<String, Object>> cpList = new ArrayList<>();
+        mapList.stream()
+                .collect(Collectors.groupingBy(map -> map.get("num")))
+                .forEach((k, list) -> {
+                    Map<String, Object> tempMap = mapFct.get();
+                    tempMap.put("num", k);
+                    BigDecimal bigDecimal = list.stream()
+                            .map(m -> m.get("amount"))
+                            .map(s -> new BigDecimal(String.valueOf(s)))
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    tempMap.put("amount", bigDecimal);
+                    cpList.add(tempMap);
+                });
+        System.out.println(cpList);
+    }
+
+    /**
+     * 对list中的map进行分组求和
+     */
     @Test
     public void listByGroup(){
         ArrayList<Map<String, Object>> maps = new ArrayList<>();
@@ -69,4 +99,33 @@ public class StreamAPI {
     private void compare(String s){
         System.out.println(s.equals("john"));
     }
+
+        public List getList(){
+            List<Map<String,Object>> reMap = new ArrayList<>();
+            Map<String,Object> map = new HashMap<>();
+            map.put("num","1234");
+            map.put("amount","33.66");
+            reMap.add(map);
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("num","1234");
+            map2.put("amount","332.66");
+            reMap.add(map2);
+            Map<String,Object> map3 = new HashMap<>();
+            map3.put("num","1235");
+            map3.put("amount","33.66");
+            reMap.add(map3);
+            Map<String,Object> map4 = new HashMap<>();
+            map4.put("num","1235");
+            map4.put("amount","3.66");
+            reMap.add(map4);
+            Map<String,Object> map5 = new HashMap<>();
+            map5.put("num","1235");
+            map5.put("amount","33.66");
+            reMap.add(map5);
+            Map<String,Object> map6 = new HashMap<>();
+            map6.put("num","1235");
+            map6.put("amount","3.66");
+            reMap.add(map6);
+            return reMap;
+        }
 }
