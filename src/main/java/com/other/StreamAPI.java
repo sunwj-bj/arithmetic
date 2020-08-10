@@ -2,14 +2,11 @@ package com.other;
 
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
-import org.mockito.internal.util.collections.HashCodeAndEqualsMockWrapper;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author sunwj
