@@ -4,6 +4,9 @@ package com.dynamic;
 import com.alibaba.fastjson.JSON;
 
 /**
+ *
+ * 国王和金矿问题
+ *
  * 动态规划的三个核心要素：
  * 1、最优子结构
  * 2、边界
@@ -58,6 +61,7 @@ public class GetMaxGold {
                     results[j]= Math.max(preResults[j],preResults[j-p[i]]+g[i]);
                 }
             }
+            //其中需要注意的是，使用浅拷贝（preResults = results）会产生数据问题
             for (int k = 0; k < preResults.length; k++) {
                 preResults[k]=results[k];
             }
