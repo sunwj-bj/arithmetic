@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
  * 1、最优子结构
  * 2、边界
  * 3、状态转移公式
+ * @author sunwj
  */
 public class GetMaxGold {
     /**
