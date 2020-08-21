@@ -15,6 +15,8 @@ public class NIOFileChannel {
     public static void main(String[] args) throws IOException {
         str2File();
         file2Str();
+        //oneFile2OtherFile();
+        oneFile2OtherFileWithoutBuffer();
     }
 
     private static void file2Str() throws IOException {
@@ -47,6 +49,47 @@ public class NIOFileChannel {
         //channel读取缓冲区数据
         fileChannel.write(byteBuffer);
         //关闭流
+        fileOutputStream.close();
+    }
+
+    /**
+     * 使用了缓冲区的文件拷贝
+     * @throws IOException
+     */
+    private static void oneFile2OtherFile() throws IOException{
+        FileInputStream fileInputStream = new FileInputStream("D:\\file01.txt");
+        FileChannel fileInputStreamChannel = fileInputStream.getChannel();
+        FileOutputStream fileOutputStream = new FileOutputStream("D:\\file02.txt");
+        FileChannel fileOutputStreamChannel = fileOutputStream.getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        while (true){
+            byteBuffer.clear();
+            int read = fileInputStreamChannel.read(byteBuffer);
+            System.out.println("read="+read);
+            //返回-1表示读完了
+            if (read==-1){
+                break;
+            }
+            byteBuffer.flip();
+            fileOutputStreamChannel.write(byteBuffer);
+        }
+        fileInputStream.close();
+        fileOutputStream.close();
+    }
+
+    /**
+     *
+     * @throws IOException
+     */
+    private static void oneFile2OtherFileWithoutBuffer() throws IOException{
+        FileInputStream fileInputStream = new FileInputStream("D:\\file01.txt");
+        FileChannel fileInputStreamChannel = fileInputStream.getChannel();
+        FileOutputStream fileOutputStream = new FileOutputStream("D:\\file02.txt");
+        FileChannel fileOutputStreamChannel = fileOutputStream.getChannel();
+        fileInputStreamChannel.transferTo(0,fileInputStreamChannel.size(),fileOutputStreamChannel);
+        fileOutputStream.close();
+        fileInputStreamChannel.close();
+        fileInputStream.close();
         fileOutputStream.close();
     }
 }
