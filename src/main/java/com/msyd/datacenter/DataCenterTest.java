@@ -1,4 +1,4 @@
-package com.msyd;
+package com.msyd.datacenter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.msyd.base.HttpClient;

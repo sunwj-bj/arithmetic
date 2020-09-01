@@ -1,4 +1,4 @@
-package com.msyd;
+package com.msyd.wireless;
 
 import com.alibaba.fastjson.JSONObject;
 import com.msyd.base.BaseControllerTest;
