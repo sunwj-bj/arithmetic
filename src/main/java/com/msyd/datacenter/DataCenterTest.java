@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,9 +44,9 @@ public class DataCenterTest {
     public void checkThreeElement(){
         String testUrl = "http://172.30.15.20/anti-fraud/userinfo/query3Element";
         StringBuffer sb = new StringBuffer();
-        sb.append("name=张三");
-        sb.append("&idCard=110101198001010037");
-        sb.append("&mobile=18763256958");
+        sb.append("name=陆苇");
+        sb.append("&idCard=520327200102170022");
+        sb.append("&mobile=18685633207");
         Response response = HttpClient.httpPostRequest(testUrl,sb.toString());
         printResult(response);
     }
@@ -79,19 +77,15 @@ public class DataCenterTest {
         }
     }
     public static Map tradePost(String reqUrl, String reqParam) throws Exception {
-
             Map retMap;
             URL url = new URL(reqUrl);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url
-                    .openConnection();
-
+            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestProperty("contentType", "UTF-8");
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setConnectTimeout(10000);
-            httpURLConnection.setRequestProperty("Content-Length",
-                    String.valueOf(reqParam.getBytes().length));
+            httpURLConnection.setRequestProperty("Content-Length",String.valueOf(reqParam.getBytes().length));
 
             httpURLConnection.getOutputStream().write(reqParam.getBytes("UTF-8"));
             httpURLConnection.getOutputStream().flush();
