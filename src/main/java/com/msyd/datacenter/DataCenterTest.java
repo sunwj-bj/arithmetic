@@ -44,9 +44,9 @@ public class DataCenterTest {
     public void checkThreeElement(){
         String testUrl = "http://172.30.15.20/anti-fraud/userinfo/query3Element";
         StringBuffer sb = new StringBuffer();
-        sb.append("name=陆苇");
-        sb.append("&idCard=520327200102170022");
-        sb.append("&mobile=18685633207");
+        sb.append("name=张明杰");
+        sb.append("&idCard=130822198601260316");
+        sb.append("&mobile=18131452488");
         Response response = HttpClient.httpPostRequest(testUrl,sb.toString());
         printResult(response);
     }
