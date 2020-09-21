@@ -19,20 +19,66 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author sunwj
+ */
 public class PayRouterTest {
 
     private static final RsaP1Util rsa = new RsaP1Util();
     private static String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     public static Logger log = LoggerFactory.getLogger(PayRouterTest.class);
 
-    String xml = XML_HEADER + "<message>" + genHead() + genCP0032_MsgBody()+ "</message>";
+    String cp0032xml = XML_HEADER + "<message>" + genHead("CP0032","CF4000038450") + genCP0032_MsgBody()+ "</message>";
+    String cp0030xml = XML_HEADER + "<message>" + genHead("CP0030","CF4000038450") + genCP0030_MsgBody()+ "</message>";
+    String cp0001xml = XML_HEADER + "<message>" + genHead("CP0001","CF4000038450") + genCP0001_MsgBody()+ "</message>";
+    String cp0002xml = XML_HEADER + "<message>" + genHead("CP0002","CF4000038450") + genCP0002_MsgBody()+ "</message>";
+    String cp0005xml = XML_HEADER + "<message>" + genHead("CP0005","CF4000038450") + genCP0005_MsgBody()+ "</message>";
 
+    /**
+     * 鉴权发短信
+     */
     @Test
     public void testCP0032(){
-        MsgInfo msgInfo = this.accquireResult(xml, "2dc2651bb6d7a06ce6144ce001312f28");
+        MsgInfo msgInfo = this.accquireResult(cp0032xml, "2dc2651bb6d7a06ce6144ce001312f28");
+        System.out.println(JSON.toJSONString(msgInfo));
+    }
+
+    /**
+     * 鉴权确认
+     */
+    @Test
+    public void testCP0030(){
+        MsgInfo msgInfo = this.accquireResult(cp0030xml, "2dc2651bb6d7a06ce6144ce001312f28");
+        System.out.println(JSON.toJSONString(msgInfo));
+    }
+
+    /**
+     * 代收
+     */
+    @Test
+    public void testCP0001(){
+        MsgInfo msgInfo = this.accquireResult(cp0001xml, "2dc2651bb6d7a06ce6144ce001312f28");
+        System.out.println(JSON.toJSONString(msgInfo));
+    }
+
+    /**
+     * 代收查询
+     */
+    @Test
+    public void testCP0002(){
+        MsgInfo msgInfo = this.accquireResult(cp0002xml, "2dc2651bb6d7a06ce6144ce001312f28");
+        System.out.println(JSON.toJSONString(msgInfo));
+    }
+    /**
+     * 分账接口
+     */
+    @Test
+    public void testCP0005(){
+        MsgInfo msgInfo = this.accquireResult(cp0005xml, "2dc2651bb6d7a06ce6144ce001312f28");
         System.out.println(JSON.toJSONString(msgInfo));
     }
 
@@ -130,27 +176,53 @@ public class PayRouterTest {
         return msgInfo;
     }
 
-    private String genHead() {
+    private String genHead(String interfaceName,String merchantNo) {
         StringBuffer sb = new StringBuffer();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = simpleDateFormat.format(new Date());
         sb.append("<head>");
-        sb.append("<trancode>").append("CP0032").append("</trancode>");
+        sb.append("<trancode>").append(interfaceName).append("</trancode>");
         sb.append("<msgtype>").append("0001").append("</msgtype>");
-        sb.append("<bussflowno>").append("CF4000038450532534532359640").append("</bussflowno>");
-        sb.append("<merchantno>").append("CF4000038450").append("</merchantno>");
-        sb.append("<merchanKey>").append("2dc2651bb6d7a06ce6144ce001312f28").append("</merchanKey>");
+        sb.append("<bussflowno>").append(merchantNo+String.valueOf(System.currentTimeMillis())).append("</bussflowno>");
+        sb.append("<merchantno>").append(merchantNo).append("</merchantno>");
         sb.append("<version>").append("1.0.0").append("</version>");
         sb.append("<channelno>").append("99").append("</channelno>");
         sb.append("<payChannelCode>").append("PayRouter").append("</payChannelCode>");
-        sb.append("<trandate>").append("20200915").append("</trandate>");
-        sb.append("<trantime>").append("172556").append("</trantime>");
+        sb.append("<trandate>").append(date, 0, 8).append("</trandate>");
+        sb.append("<trantime>").append(date, 8,14).append("</trantime>");
         sb.append("</head>");
         return sb.toString();
     }
     private String genCP0032_MsgBody() {
-        String queryParam = "accountType=00&certType=01&certNo=410185199411223011&" +
+        String queryParam = "accountType=00&certType=01&certNo=111111111111111111&" +
                 "accountNo=6210984910004641329&bankName=中国邮政储蓄银行&" +
-                "currentTranCode=CP0032&accountName=孙文杰&mobileNo=18738197893&" +
+                "currentTranCode=CP0032&accountName=啦啦啦&mobileNo=11111111111&" +
                 "authenticationType=01";
+        return GenBodyUtil.genBody(queryParam);
+    }
+    private String genCP0030_MsgBody() {
+        String queryParam = "accountType=00&" +
+                "accountNo=6210984910004641329&bankName=中国邮政储蓄银行&" +
+                "mobileNo=11111111111&authenticationType=01&phoneVerCode=700354";
+        return GenBodyUtil.genBody(queryParam);
+    }
+    private String genCP0001_MsgBody() {
+        String queryParam = "accountType=00&accountName=啦啦啦&tranAmt=0.01&curType=CNY&" +
+                "bsnType=11203&accountNo=6210984910004641329&bankName=中国邮政储蓄银行&" +
+                "mobileNo=11111111111&authenticationType=01&phoneVerCode=000000&" +
+                "certType=01&certNo=111111111111111111";
+        return GenBodyUtil.genBody(queryParam);
+    }
+    private String genCP0005_MsgBody() {
+        String shareInfo="[{\"ledgerno\": \"10000449592\",\"dividemode\": \"AMOUNT\",\"dividevalue\": \"0.01\"}]";
+        String queryParam = "accountType=00&accountName=啦啦啦&tranAmt=1&curType=CNY&" +
+                "bsnType=11203&accountNo=6210984910004641329&bankName=中国邮政储蓄银行&" +
+                "mobileNo=18738197893&authenticationType=01&phoneVerCode=000000&msgExt=YBCOLL&" +
+                "certType=01&certNo=111111111111111111&shareInfo="+shareInfo;
+        return GenBodyUtil.genBody(queryParam);
+    }
+    private String genCP0002_MsgBody() {
+        String queryParam = "orgTranFlow=CF40000384501600329884267";
         return GenBodyUtil.genBody(queryParam);
     }
 
