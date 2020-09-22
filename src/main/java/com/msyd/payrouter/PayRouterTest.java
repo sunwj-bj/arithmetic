@@ -118,7 +118,7 @@ public class PayRouterTest {
         if (merchantNo.equals(ThirdPayConstant.PAY_ROUTE_MERCHANT_NO) || payChannelCode.equals("PayRouter")
                 || merchantNo.equals(ThirdPayConstant.PAY_ROUTE_XD_MERCHANT_NO)
                 || ThirdPayConstant.MERCHANT_SF_V1.equals(ThirdPayConstant.MERCHANT_SF_SWITCH)) {
-            return accquireResultPayRouter(xml, merchanKey, merchantNo, payChannelCode);
+            return acquireResultPayRouter(xml, merchanKey, merchantNo, payChannelCode);
         }
 
         //过滤xml标签
@@ -154,7 +154,7 @@ public class PayRouterTest {
             log.error("上送三方报文加密出现异常!", e);
             return msgInfo;
         }
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("xml", envelopdata);
         params.put("mac", "");
         log.info("上送三方报文：" + params);
@@ -166,8 +166,7 @@ public class PayRouterTest {
             //利用httpClient发送xml，mac到三方支付，执行交易
             result = HttpClient431Util.doPost(params, ThirdPayConstant.THIRD_PAY_PATH);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            log.error("调用三方支付接口出现异常:返回结果result=" + result, e);
+            log.error("调用三方支付接口出现异常！", e);
             return msgInfo;
         }
         log.info("三方返回报文：" + result);
@@ -226,10 +225,8 @@ public class PayRouterTest {
         return GenBodyUtil.genBody(queryParam);
     }
 
-    private MsgInfo accquireResultPayRouter(String xml, String merchanKey, String merchantNo, String payChannelCode) {
-        // TODO Auto-generated method stub
+    private MsgInfo acquireResultPayRouter(String xml, String merchanKey, String merchantNo, String payChannelCode) {
         MsgInfo msgInfo = new MsgInfo();
-
         String MERCHANT_URL;
         //对请求报文执行一次加密运算，得到加密摘要
         String mac = DigestUtils.sha256Hex(xml + merchanKey);
@@ -240,14 +237,12 @@ public class PayRouterTest {
         //记录发送报文内容
         msgInfo.setSendMsg(params.toString());
         MERCHANT_URL = ThirdPayConstant.THIRD_PAY_PATH;
-        String result = null;
+        String result;
         try {
-
             //利用httpClient发送xml，mac到三方支付，执行交易
             result = HttpClient431Util.doPost(params, MERCHANT_URL);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            log.error("调用支付接口出现异常:返回结果result=" + result, e);
+            log.error("调用支付接口出现异常！", e);
             return msgInfo;
         }
         log.info("支付渠道返回报文：" + result);
