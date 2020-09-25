@@ -30,8 +30,10 @@ public class HttpUtil {
 
     public static String post(String requestUrl, String accessToken, String contentType, String params, String encoding)
             throws Exception {
-        String url = requestUrl + "?access_token=" + accessToken;
-        return HttpUtil.postGeneralUrl(url, contentType, params, encoding);
+        if (accessToken!=null&&accessToken!=""){
+            requestUrl = requestUrl + "?access_token=" + accessToken;
+        }
+        return HttpUtil.postGeneralUrl(requestUrl, contentType, params, encoding);
     }
 
     public static String postGeneralUrl(String generalUrl, String contentType, String params, String encoding)
