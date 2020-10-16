@@ -44,8 +44,9 @@ public class HttpUtil {
             con.setDoOutput(true);
             con.setDoInput(true);
             con.setUseCaches(false);
-            // con.setConnectTimeout(300*1000);
-            // con.setReadTimeout(300*1000);
+            con.setConnectTimeout(300*1000);
+            con.setReadTimeout(300*1000);
+            //请求WEB一般用X-WWW-FORM-URLENCODED 请求API一般用application/json
             con.setRequestProperty("Content-Type", "application/json");
             OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
             osw.write(sendString);
