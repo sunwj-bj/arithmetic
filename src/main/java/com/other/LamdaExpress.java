@@ -18,9 +18,12 @@ public class LamdaExpress {
         bookList.add(new Book("The Return of the King",  "0618129111"));
 
         //Map<String,String> map = bookList.stream().collect(Collectors.toMap(Book::getIsbn, Book::getName));
-        //第三个参数传merge函数过去，如果有重复的key，就按照这个函数处理。
-        Map<String,Book> bookMap = bookList.stream().collect(Collectors.toMap(Book::getIsbn, Book->Book,(k1,k2)->k1));
+        //转MAP,第三个参数传merge函数过去，如果有重复的key，就按照这个函数处理。
+        Map<String,Book> bookMap = bookList.stream().filter(t -> t.getIsbn()!=null).collect(Collectors.toMap(Book::getIsbn, Book->Book,(k1,k2)->k1));
+        //转List
+        List<String> collect = bookList.stream().map(Book::getIsbn).collect(Collectors.toList());
         System.out.println(JSONObject.toJSONString(bookMap));
+        System.out.println(JSONObject.toJSONString(collect));
 
     }
 
