@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author sunwj
@@ -29,5 +31,14 @@ public class ComprehensiveTest {
         System.out.println(c.getTime());
 
 
+    }
+
+    /**
+     * 测试正则表达式
+     */
+    @Test
+    public void testPattern(){
+        String content = "234234234234";
+        System.out.println(Pattern.matches("^[0-9]*$",content));
     }
 }
