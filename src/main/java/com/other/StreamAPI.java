@@ -15,6 +15,33 @@ import java.util.stream.Collectors;
  */
 public class StreamAPI {
 
+
+   class  Person{
+       public Person(String name, Integer age) {
+           this.name = name;
+           this.age = age;
+       }
+
+       String name;
+        Integer age;
+
+       public String getName() {
+           return name;
+       }
+
+       public void setName(String name) {
+           this.name = name;
+       }
+
+       public Integer getAge() {
+           return age;
+       }
+
+       public void setAge(Integer age) {
+           this.age = age;
+       }
+   }
+
     /**
      * 对list中的map进行分组求和
      * 利用java8工具类
@@ -83,6 +110,18 @@ public class StreamAPI {
             }
         }
     }
+
+    @Test
+    public void tesstChange(){
+        ArrayList<Person> people = new ArrayList<>();
+        people.add(new Person("aaa",11));
+        people.add(new Person("bbb",12));
+        people.add(new Person("ccc",13));
+        people.stream().forEach(person -> person.setAge(11));
+        System.out.println(JSON.toJSON(people));
+
+    }
+
 
     @Test
     public void test(){
