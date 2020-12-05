@@ -24,12 +24,14 @@ public class MergeArray2New {
                 while (j<arr2.length){
                     arr[k++]=arr2[j++];
                 }
+                //这里直接return，一方面提高效率，另一方面防止下面判断空指针
                 return;
             }
             if (j==arr2.length){
                 while (i<arr1.length){
                     arr[k++]=arr1[i++];
                 }
+                //这里直接return，一方面提高效率，另一方面防止下面判断空指针
                 return;
             }
             if (arr1[i]<arr2[j]){
