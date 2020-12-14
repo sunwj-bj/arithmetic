@@ -1,5 +1,8 @@
 package com.node;
 
+/**
+ * 这种链表的节点不要用toString 否则会内存溢出，惨痛的教训
+ */
 public class Node {
     public int value;
     public Node next;
@@ -27,4 +30,5 @@ public class Node {
     public void setNext(Node next) {
         this.next = next;
     }
+
 }
