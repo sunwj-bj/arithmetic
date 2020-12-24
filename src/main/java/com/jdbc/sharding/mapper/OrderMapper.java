@@ -1,7 +1,7 @@
-package com.jdbc.shardingShpere.mapper;
+package com.jdbc.sharding.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.jdbc.shardingShpere.bean.Order;
+import com.jdbc.sharding.bean.Order;
 import org.springframework.stereotype.Repository;
 
 @Repository

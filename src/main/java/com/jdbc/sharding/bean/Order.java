@@ -1,4 +1,4 @@
-package com.jdbc.shardingShpere.bean;
+package com.jdbc.sharding.bean;
 
 import lombok.Data;
 
