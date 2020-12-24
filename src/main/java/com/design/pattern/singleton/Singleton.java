@@ -1,4 +1,4 @@
-package com.interview;
+package com.design.pattern.singleton;
 
 /**
  * @author sunwj
