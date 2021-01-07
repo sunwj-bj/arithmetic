@@ -1,7 +1,7 @@
 
 import com.Application;
-import com.jdbc.shardingShpere.bean.Order;
-import com.jdbc.shardingShpere.mapper.OrderMapper;
+import com.jdbc.sharding.bean.Order;
+import com.jdbc.sharding.mapper.OrderMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
