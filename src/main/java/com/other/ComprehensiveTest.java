@@ -41,4 +41,9 @@ public class ComprehensiveTest {
         String content = "234234234234";
         System.out.println(Pattern.matches("^[0-9]*$",content));
     }
+
+    @Test
+    public void binaryCompute(){
+        System.out.println(1<<9);
+    }
 }
