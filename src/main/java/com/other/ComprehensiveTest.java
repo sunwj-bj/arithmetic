@@ -44,6 +44,21 @@ public class ComprehensiveTest {
 
     @Test
     public void binaryCompute(){
+        //对象初始化boolean值默认为false
+        BooleanFlag booleanFlag = new BooleanFlag();
         System.out.println(1<<9);
+        System.out.println(booleanFlag.isFlag());
+    }
+
+    class BooleanFlag{
+        boolean flag;
+
+        public boolean isFlag() {
+            return flag;
+        }
+
+        public void setFlag(boolean flag) {
+            this.flag = flag;
+        }
     }
 }
