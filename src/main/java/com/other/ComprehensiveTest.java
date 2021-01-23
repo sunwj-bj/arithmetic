@@ -34,13 +34,33 @@ public class ComprehensiveTest {
 
     }
 
-   /**
+    /**
      * 测试正则表达式
      */
     @Test
     public void testPattern(){
         String content = "234234234234";
         System.out.println(Pattern.matches("^[0-9]*$",content));
+    }
+
+    @Test
+    public void binaryCompute(){
+        //对象初始化boolean值默认为false
+        BooleanFlag booleanFlag = new BooleanFlag();
+        System.out.println(1<<9);
+        System.out.println(booleanFlag.isFlag());
+    }
+
+    class BooleanFlag{
+        boolean flag;
+
+        public boolean isFlag() {
+            return flag;
+        }
+
+        public void setFlag(boolean flag) {
+            this.flag = flag;
+        }
     }
 
    /**
