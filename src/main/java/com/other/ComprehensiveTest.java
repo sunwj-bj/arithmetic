@@ -29,8 +29,8 @@ public class ComprehensiveTest {
         Calendar c = Calendar.getInstance();
         c.setTime(parse);
         System.out.println(c.getTime());
-
-
+        Date date = new Date(1610627927);
+        System.out.println(date);
     }
 
     /**
@@ -42,6 +42,14 @@ public class ComprehensiveTest {
         System.out.println(Pattern.matches("^[0-9]*$",content));
     }
 
+    /**
+    * 二进制计算
+    * @author      sunwenjie
+    * @return
+    * @exception
+    * @date        2021/1/14 21:03
+    * @Version:    1.0
+    */
     @Test
     public void binaryCompute(){
         //对象初始化boolean值默认为false
