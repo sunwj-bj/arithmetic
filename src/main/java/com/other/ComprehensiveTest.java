@@ -1,5 +1,6 @@
 package com.other;
 
+import com.msyd.base.StringUtil;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -69,4 +70,14 @@ public class ComprehensiveTest {
             this.flag = flag;
         }
     }
+
+   /**
+     * 测试正则表达式
+     */
+    @Test
+    public void testNum(){
+        String content = "80.00";
+        System.out.println(StringUtil.isNumeric(content));
+    }
+
 }
