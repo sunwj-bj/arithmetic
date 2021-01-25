@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -76,8 +75,9 @@ public class ComprehensiveTest {
      */
     @Test
     public void testNum(){
-        String content = "80.00";
+        String content = "80.10";
         System.out.println(StringUtil.isNumeric(content));
+        System.out.println(Double.valueOf(content).intValue());
     }
 
 }
