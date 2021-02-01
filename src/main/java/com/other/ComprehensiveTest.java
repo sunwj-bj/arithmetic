@@ -79,5 +79,15 @@ public class ComprehensiveTest {
         System.out.println(StringUtil.isNumeric(content));
         System.out.println(Double.valueOf(content).intValue());
     }
+   /**
+     * 时间戳计算
+     */
+    @Test
+    public void computeTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Long ts = 1611907979*1000L;
+        System.out.println(simpleDateFormat.format(new Date(ts)));
+        System.out.println(System.currentTimeMillis());
+    }
 
 }
