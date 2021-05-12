@@ -83,11 +83,18 @@ public class ComprehensiveTest {
      * 时间戳计算
      */
     @Test
-    public void computeTime(){
+    public void computeTime() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Long ts = 1611907979*1000L;
+        //时间戳转时间
+        Long ts = 1617206400*1000L;
         System.out.println(simpleDateFormat.format(new Date(ts)));
-        System.out.println(System.currentTimeMillis());
+
+        //指定时间转时间戳
+        Date date = simpleDateFormat.parse("2021-04-01 00:00:00");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        System.out.println(cal.getTimeInMillis());
+
     }
 
 }
