@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
@@ -95,6 +96,12 @@ public class ComprehensiveTest {
         cal.setTime(date);
         System.out.println(cal.getTimeInMillis());
 
+    }
+
+    @Test
+    public void testRandom(){
+        final Random random = new Random(System.currentTimeMillis());
+        System.out.println(random.nextInt(100));
     }
 
 }
